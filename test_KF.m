@@ -2,10 +2,10 @@ clear
 clc
 
 
-result_file = 'C:\Users\ART\Documents\GitHub\tracking\out.avi';
+result_file = 'C:\Users\ART\Documents\GitHub\cwork_tracking\out.avi';
 writer = avifile(result_file, 'compression', 'None');
 
-video = mmreader('F:\MA\Alberto Gallazzi - TACFIT Survival\1.avi');
+video = mmreader('C:\Users\ART\Documents\GitHub\cwork_tracking\test_video.avi');
 video_width  = video.Width;
 video_height = video.Height;
 frameRate = video.FrameRate;
@@ -23,7 +23,7 @@ end;
 
 
 
-for number_frame = 401:1:410
+for number_frame = 401:1:500
     
     frame = read( video, number_frame);
     frame = im2double(frame);
@@ -55,7 +55,8 @@ for number_frame = 401:1:410
                     KF = 0;
                     for k = 1:1:8
                         for m = 1:1:8                            
-                            KF = KF + abs(RI(i+k,j+m)-CI(i+k+d_i, j+m+d_j)); %(RI(i+k,j+m)-MRI)*(CI(i+k+d_i, j+m+d_j)-MCI);
+%                             KF = KF + abs(RI(i+k,j+m)-CI(i+k+d_i, j+m+d_j)); %(RI(i+k,j+m)-MRI)*(CI(i+k+d_i, j+m+d_j)-MCI);
+                              KF = KF + (RI(i+k,j+m)-MRI)*(CI(i+k+d_i, j+m+d_j)-MCI);
                         end;
                     end;
                     if (KF > KFmax)
@@ -65,7 +66,7 @@ for number_frame = 401:1:410
                     end;
                 end;
             end;
-            if (KFmax > 5)
+            if (KFmax > 0.5)
     %             ResI(i+4,j+4) = 0.5;
     %             ResI(i+4+imax,j+4+jmax) = 1;           
                 ResI = line2(ResI, 1, i+4, i+4+imax, j+4, j+4+jmax );
